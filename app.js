@@ -3,7 +3,9 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const bodyParser = require("body-parser");
 
-const port = 8000;
+const axios = require('axios');
+
+const port = 80;
 
 // body-parser
 app.use(bodyParser.json());
@@ -192,6 +194,151 @@ app.post('/send-notification', (req, res) => {
 
   res.send(notify);
 });
+
+
+// ciss notify
+// verify visitor
+app.post('/cissnotify', (req, res) => {
+
+  const notify = req.body;
+
+  let data = null;
+
+  axios.post('http://192.168.23.8:8000/send-notification', notify, {
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  .then(function (response) {
+    // console.log(response.data);
+    data = response.data;
+    res.send(data);
+  })
+  .catch(function (error) {
+    console.log(error);
+    res.send({
+      "success": false,
+      "msg": "Something went wrong"
+  });
+  });
+  
+});
+// end verify visitor
+// end ciss notify
+
+// verify visitor
+app.post('/verifyvisitor', (req, res) => {
+
+  const notify = req.body;
+
+  let data = null;
+
+  axios.post('http://192.168.64.150:364/api/v1/ciss/fetch', notify, {
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  .then(function (response) {
+    // console.log(response.data);
+    data = response.data;
+    res.send(data);
+  })
+  .catch(function (error) {
+    console.log(error);
+    res.send({
+      "success": false,
+      "msg": "Something went wrong"
+  });
+  });
+  
+});
+// end verify visitor
+
+// verify employee
+app.post('/verifyemployee', (req, res) => {
+
+  // const hmac = req.params.text;
+  const hmac = req.body.hmac;
+  const bearer = req.body.bearer;
+
+  let data = null;
+
+  axios.get(`http://192.168.23.8/api/profile/${hmac}`, {
+    headers: {
+      'Authorization': `Bearer ${bearer}`
+    }
+  })
+  .then(function (response) {
+    // console.log(response.data);
+    data = response.data;
+    res.json(data);
+  })
+  .catch(function (error) {
+    console.log(error);
+    res.send({
+      "success": false,
+      "msg": "Something went wrong"
+  });
+  });
+  
+});
+// end verify employee
+
+// logs
+app.post('/log', (req, res) => {
+
+  const notify = req.body;
+
+  let data = null;
+
+  axios.post('http://192.168.23.8:3001/api/gateaccess/entry', notify, {
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  .then(function (response) {
+    // console.log(response.data);
+    data = response.data;
+    res.send(data);
+  })
+  .catch(function (error) {
+    console.log(error);
+    res.send({
+      "status": 0,
+      "message": "Something went wrong"
+  });
+  });
+  
+});
+// end logs
+
+// ciss auth token
+app.post('/cissauth', (req, res) => {
+
+  const notify = req.body;
+
+  let data = null;
+
+  axios.post('http://192.168.23.8/users/authenticate', notify, {
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  .then(function (response) {
+    // console.log(response.data);
+    data = response.data;
+    res.send(data);
+  })
+  .catch(function (error) {
+    console.log(error);
+    res.send({
+      "success": false,
+      "msg": "Something went wrong"
+  });
+  });
+  
+});
+// end ciss auth token
 
 server.listen(port);
 
