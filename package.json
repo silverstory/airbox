@@ -15,6 +15,7 @@
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
+    "http-proxy-middleware": "^1.0.6",
     "nodemon": "^1.19.4"
   },
   "main": "app.js",

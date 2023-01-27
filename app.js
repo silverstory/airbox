@@ -1,4 +1,7 @@
 const app = require('express')();
+const {
+  createProxyMiddleware
+} = require('http-proxy-middleware');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const bodyParser = require("body-parser");
@@ -6,6 +9,12 @@ const bodyParser = require("body-parser");
 const axios = require('axios');
 
 const port = 80;
+
+app.use('/api', createProxyMiddleware({
+  target: 'http://192.168.64.150:364', // 'http://localhost:3310'
+  changeOrigin: true,
+  logLevel: 'debug'
+}));
 
 // body-parser
 app.use(bodyParser.json());
