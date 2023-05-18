@@ -10,11 +10,11 @@ const axios = require('axios');
 
 const port = 80;
 
-app.use('/api', createProxyMiddleware({
-  target: 'http://192.168.64.150:364', // 'http://localhost:3310'
-  changeOrigin: true,
-  logLevel: 'debug'
-}));
+// app.use('/api', createProxyMiddleware({
+//   target: 'http://192.168.64.150:364', // 'http://localhost:3310'
+//   changeOrigin: true,
+//   logLevel: 'debug'
+// }));
 
 // body-parser
 app.use(bodyParser.json());
@@ -197,6 +197,26 @@ app.post('/cissauth', (req, res) => {
   
 });
 // end ciss auth token
+
+
+// visitor photo
+app.get('/visitorphoto', async (req, res) => {
+
+  const visitorid = req.query.id;
+
+  const arrayBuffer = await axios.get(`http://192.168.64.150:364/api/v1/ciss/getPhoto?id=${visitorid}`, {
+    responseType: "arraybuffer"
+  });
+
+  res.set({
+    'Content-Type': 'image/png',
+    'Content-Length': arrayBuffer.data.length
+  });
+
+  res.send(arrayBuffer.data);
+  
+});
+// end visitor photo
 
 server.listen(port);
 
