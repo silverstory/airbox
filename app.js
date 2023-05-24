@@ -199,8 +199,8 @@ app.post('/cissauth', (req, res) => {
 // end ciss auth token
 
 
-// visitor photo
-app.get('/visitorphoto', async (req, res) => {
+// visitor photo. app.post because app.get don't work on vm bs.
+app.post('/visitorphoto', async (req, res) => {
 
   const visitorid = req.query.id;
 
