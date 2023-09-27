@@ -112,6 +112,34 @@ app.post('/verifyvisitorv2', (req, res) => {
 // end verify visitor
 // email qr code
 
+// send to flop
+app.post('/sendtoflop', (req, res) => {
+
+  const notify = req.body;
+
+  let data = null;
+
+  axios.post('http://192.168.64.150:364/api/v1/ciss/autoPass', notify, {
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  .then(function (response) {
+    // console.log(response.data);
+    data = response.data;
+    res.send(data);
+  })
+  .catch(function (error) {
+    console.log(error);
+    res.send({
+      "success": false,
+      "msg": "Something went wrong"
+  });
+  });
+  
+});
+// end send to flop
+
 // verify employee
 app.post('/verifyemployee', (req, res) => {
 
