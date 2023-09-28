@@ -227,8 +227,8 @@ app.post('/cissauth', (req, res) => {
 // end ciss auth token
 
 
-// visitor photo. added /api. change back to app.get
-app.get('/api/visitorphoto', async (req, res) => {
+// visitor photo
+app.get('/visitorphoto', async (req, res) => {
 
   const visitorid = req.query.id;
 
@@ -236,12 +236,24 @@ app.get('/api/visitorphoto', async (req, res) => {
     responseType: "arraybuffer"
   });
 
-  res.set({
-    'Content-Type': 'image/png',
-    'Content-Length': arrayBuffer.data.length
-  });
+  // res.set({
+  //   'Content-Type': 'image/png',
+  //   'Content-Length': arrayBuffer.data.length
+  // });
 
-  res.send(arrayBuffer.data);
+  // // 'Content-Type': 'image/jpeg',
+
+  // res.send(arrayBuffer.data);
+
+  // --
+
+  // res.contentType('image/jpeg');
+  // res.send(Buffer.from(arrayBuffer.data, 'binary'))
+
+  // --
+
+  let returnedB64 = Buffer.from(arrayBuffer.data, 'binary').toString('base64');
+  res.send(returnedB64);
   
 });
 // end visitor photo
